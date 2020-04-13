@@ -71,134 +71,40 @@
               
         <section id="last-ideas">
 
+
+            {% for idea in ideas %}
             <div class="id">
 
 
-                <img src="https://www.flaticon.com/premium-icon/icons/svg/2007/2007476.svg" 
+                <img src="{{idea.image}}" 
                 
-                alt="codar">
+                alt="{{idea.title}}">
 
                 <div class="content">
 
-                    <h3>Cursos de programação</h3>
-                    <p>Estudp</p>
+                    <h3>{{idea.title}}</h3>
+                    <p>{{idea.category}} </p>
                     <div class="description">
-                         Lorem ipsum dolor sit amet consectetur, 
-                         adipisicing elit. Dolorum nisi ut iure voluptates explicabo doloremque
-                         amet ipsum ullam mollitia sint delectus esse rem expedita consequatur 
-                         beatae tempora officiis, saepe voluptatum?
+                        {{idea.description}}
                     </div>
 
-                    <a href="#">Ir para a ideia</a>
+                    <a href="{{idea.link}}" target="_blank">Ir para a Ideias</a>
+                   
+
+
                 </div>
-
-
+            
+            
             </div>
-            <div class="id">
-
-
-                <img src="https://image.flaticon.com/icons/svg/2445/2445918.svg" 
-                
-                alt="Exercícios">
-
-                <div class="content">
-
-                    <h3>Exercícios</h3>
-                    <p>Saúde</p>
-                    <div class="description">
-                         Lorem ipsum dolor sit amet consectetur, 
-                         adipisicing elit. Dolorum nisi ut iure voluptates explicabo doloremque
-                         amet ipsum ullam mollitia sint delectus esse rem expedita consequatur 
-                         beatae tempora officiis, saepe voluptatum?
-                    </div>
-
-                    <a href="#">Ir para a ideia</a>
-                </div>
-
-
-            </div>
-            <div class="id">
-
-
-                <img src="https://image.flaticon.com/icons/svg/2003/2003818.svg" 
-                
-                alt="meditar">
-
-                <div class="content">
-
-                    <h3>Meditação</h3>
-                    <p>Mentalidade</p>
-                    <div class="description">
-                         Lorem ipsum dolor sit amet consectetur, 
-                         adipisicing elit. Dolorum nisi ut iure voluptates explicabo doloremque
-                         amet ipsum ullam mollitia sint delectus esse rem expedita consequatur 
-                         beatae tempora officiis, saepe voluptatum?
-                    </div>
-
-                    <a href="#">Ir para a ideia</a>
-                </div>
-
-
-            </div>
+            {% endfor %}
+            
 
 
         </section>
 
     </div>
 
-    <div id="modal" class="hide">
-        <div class="content"> 
-            <h1>Nova ideia</h1>
-
-            <form action="">
-            
-            
-                <div class="input-wraper">
-            
-                    <label for="title">Titulo da ideaia</label>
-                    <input type="text" name="title">
-            
-                </div>
-                <div class="input-wraper">
-            
-                    <label for="category">Categoria</label>
-                    <input type="text" name="category">
-            
-                </div>
-                <div class="input-wraper">
-            
-            
-                    <label for="image">Link da imagem</label>
-                    <input type="url" name="imagem">
-            
-                </div>
-                <div class="input-wraper">
-            
-            
-                    <label for="description">Digite uma descrição para esta
-                        ideia</label>
-                    <textarea name="description" cols="30" rows="10"></textarea>
-            
-                </div>
-            
-                <div class="input-wraper">
-            
-                    <label for="link">Link da ideia</label>
-                    <input type="url" name="link">
-            
-                </div>
-                <a href="#" onclick="onOff()">Voltar</a>
-                <button>Salvar</button>
-
-
-            </form>
-
-
-        </div>
-
-
-    </div>
-  
+    {% include "modal.html" %}
 
 <script src="script.js"></script>
 </body>

@@ -1,16 +1,17 @@
 const express = require('express')
 const server = express()
 const nunjucks = require("nunjucks")
+const knex = require('./src/database/connection')
+const { response } = require('express')
 
 
-const db = require("./db")
 
 
 
 nunjucks.configure("views", {
     express: server,
     noCache: true,
-
+    
 })
 
 server.use(express.static('public'))
@@ -20,77 +21,56 @@ server.use(express.urlencoded({ extended: true }))
 
 
 
-server.get("/", function (req, res) {
-
-    db.all(`SELECT * FROM ideas`, function (err, rows) {
-        if (err) {
-            console.log(err)
-            return res.send("erro no banco de dados")
+server.get("/", async function (req, res) {
+    
+    
+    const rows = await knex('ideas').select('*');
+    if (!rows){
+        return response.status(400).json({ message: 'Not Found'})
+    }
+    
+    const reversedIdeas = [...rows].reverse()
+    let lastIdeas = []
+    for (let idea of reversedIdeas) {
+        if (lastIdeas.length < 2) {
+            lastIdeas.push(idea)
         }
-
-
-        const reversedIdeas = [...rows].reverse()
-        let lastIdeas = []
-        for (let idea of reversedIdeas) {
-            if (lastIdeas.length < 2) {
-                lastIdeas.push(idea)
-
-            }
-
-        }
-        return res.render("index.html", { ideas: lastIdeas })
-    })
-
-})
-server.get("/ideias", function (req, res) {
-
-
-
-
-    db.all(`SELECT * FROM ideas`, function (err, rows) {
-
-        if (err) {
-            console.log(err)
-            return res.send("erro no banco de dados")
-        }
-
-        const reversedIdeas = [...rows].reverse()
-
-        return res.render("ideias.html", { ideas: reversedIdeas })
-
-    })
-
+    }
+    
+    return res.render("index.html", { ideas: lastIdeas })
+    
 })
 
-server.post("/", function (req, res) {
 
-    const query = `
-INSERT INTO ideas(
-  image,
-  title,
-  category,
-  description,
-  link
-) VALUES(?,?,?,?,?);`
 
-    const values = [
-        req.body.image,
-        req.body.title,
-        req.body.category,
-        req.body.description,
-        req.body.link
-    ]
+server.get("/ideias", async function (req, res) {
+    
+    const rows = await knex('ideas').select('*')
+    if (!rows){
+        return response.status(400).json({ message: 'Not Found'})
+    }
+    const reversedIdeas = [...rows].reverse()
+    
+    return res.render("ideias.html", { ideas: reversedIdeas })
+})
 
-    db.run(query, values, function (err) {
+server.post("/", async function (req, res) {
+    
+    const { image, title, category, description, link } = req.body;
+    
+    const idea =  {
+        image,
+        title,
+        category,
+        description,
+        link
+    };
 
-        if (err) {
-            console.log(err)
-            return res.send("erro no banco de dados")
-        }
-
-        return res.redirect("/ideias")
-
-    })
-
+    await knex('ideas').insert(idea);
+    
+    return res.redirect("/ideias");
+    
+    
+    
 })
 server.listen(3000)

@@ -4,15 +4,18 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "run:migrate": "knex --knexfile knexfile.js migrate:latest",
+    "seeds": "knex --knexfile knexfile.js seed:run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "knex": "^0.21.1",
     "nodemon": "^2.0.2",
     "nunjucks": "^3.2.1",
-    "sqlite3": "^4.1.1"
+    "sqlite3": "^4.2.0"
   }
 }
